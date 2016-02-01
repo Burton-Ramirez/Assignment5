@@ -121,10 +121,35 @@ angular.module('listings').controller('ListingsController', ['$scope', '$locatio
                });
     };
 
-    /* Bind the success message to the scope if it exists as part of the current state */
-    if($stateParams.successMessage) {
-      $scope.success = $stateParams.successMessage;
-    }
+    
+
+    $scope.getAllForMap = function(){
+        // user-created function for map-listings.client.view.html
+
+          $scope.loading = true;
+          $scope.listings = [];
+          // Get all the listings, then push it to the scope
+          Listings.getAll()
+                .then(function(response){
+                  $scope.loading = false; //remove loader
+                  response.data.forEach(function(listing){
+                  if(listing.coordinates) {
+                    $scope.listings.push(listing);
+                }
+                });
+
+
+          }, function(error){
+            $scope.loading = false;
+            $scope.error = "Unable to retrieve listings!\n + error";
+          });
+        };
+
+        /* Bind the success message to the scope if it exists as part of the current state */
+        if($stateParams.successMessage) {
+          $scope.success = $stateParams.successMessage;
+
+        }
 
     /* Map properties */
     $scope.map = {
@@ -133,30 +158,6 @@ angular.module('listings').controller('ListingsController', ['$scope', '$locatio
         longitude: -82.3410518
       },
       zoom: 14
-    };
-    $scope.options = {
-      scrollwheel: false
-    };
-
-    var createMarker = function(i, bounds, idKey) {
-      var lat_min = bounds.southwest.latitude,
-        lat_range = bounds.northeast.latitude - lat_min,
-        lng_min = bounds.southwest.longitude,
-        lng_range = bounds.northeast.longitude - lng_min;
-
-      if (idKey == null) {
-        idKey = "id";
-      }
-
-      var latitude = lat_min + (Math.random() * lat_range);
-      var longitude = lng_min + (Math.random() * lng_range);
-      var ret = {
-        latitude: latitude,
-        longitude: longitude,
-        title: 'm' + i
-      };
-      ret[idKey] = i;
-      return ret;
     };
 
   }
