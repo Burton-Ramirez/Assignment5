@@ -90,19 +90,10 @@ angular.module('listings').controller('ListingsController', ['$scope', '$locatio
          return false;
        }
 
-       /* Create the listing object
-       var listing = {
-         name: $scope.name,
-         code: $scope.code,
-         address: $scope.address
-       };
-
-       //update listing object
-       //need code to update the listing
-
-*/
        /* Save the article using the Listings factory */
-       Listings.update(listing)
+       var id = $stateParams.listingId;
+
+       Listings.update(id, $scope.listing)
                .then(function(response) {
                  //if the object is successfully saved redirect back to the list page
                  $state.go('listings.list', { successMessage: 'Listing succesfully updated!' });
