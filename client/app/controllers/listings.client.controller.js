@@ -111,14 +111,14 @@ angular.module('listings').controller('ListingsController', ['$scope', '$locatio
 
        var id = $stateParams.listingId;
 
-       Listings.remove(id)
+       Listings.delete(id)
                .then(function(response) {
                  //code to delete?
+                 //$scope.id.splice($scope.id.indexOf(id),1);
                  $state.go('listings.list', { successMessage: 'Listing succesfully deleted!' });
                }, function(error) {
                  $scope.error = 'Unable to delete listing with id "' + id + '"\n' + error;
                });
-       
     };
 
     /* Bind the success message to the scope if it exists as part of the current state */
@@ -133,6 +133,31 @@ angular.module('listings').controller('ListingsController', ['$scope', '$locatio
         longitude: -82.3410518
       },
       zoom: 14
-    }
+    };
+    $scope.options = {
+      scrollwheel: false
+    };
+
+    var createMarker = function(i, bounds, idKey) {
+      var lat_min = bounds.southwest.latitude,
+        lat_range = bounds.northeast.latitude - lat_min,
+        lng_min = bounds.southwest.longitude,
+        lng_range = bounds.northeast.longitude - lng_min;
+
+      if (idKey == null) {
+        idKey = "id";
+      }
+
+      var latitude = lat_min + (Math.random() * lat_range);
+      var longitude = lng_min + (Math.random() * lng_range);
+      var ret = {
+        latitude: latitude,
+        longitude: longitude,
+        title: 'm' + i
+      };
+      ret[idKey] = i;
+      return ret;
+    };
+
   }
 ]);

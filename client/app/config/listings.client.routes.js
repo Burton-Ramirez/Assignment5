@@ -31,8 +31,8 @@ angular.module('listings').config(['$stateProvider', '$urlRouterProvider',
 
        })
        .state('listings.map', {
-         //url: '/:listingId',
-         //templateUrl: 'app/views/view-listing.client.view.html'
+         url: 'map.view',
+         templateUrl: 'app/views/map-listings.client.view.html'
          //implement for map
        })
   }
