@@ -18,19 +18,6 @@ angular.module('listings').controller('ListingsController', ['$scope', '$locatio
       debugger;
       $scope.loading = true;
 
-      /*
-        Take a look at 'list-listings.client.view', and find the ui-sref attribute that switches the state to the view
-        for a single listing. Take note of how the state is switched:
-
-          ui-sref="listings.view({ listingId: listing._id })"
-
-        Passing in a parameter to the state allows us to access specific properties in the controller.
-
-        Now take a look at 'view-listing.client.view'. The view is initialized by calling "findOne()".
-        $stateParams holds all the parameters passed to the state, so we are able to access the id for the
-        specific listing we want to find in order to display it to the user.
-       */
-
       var id = $stateParams.listingId;
 
       Listings.read(id)
@@ -121,35 +108,29 @@ angular.module('listings').controller('ListingsController', ['$scope', '$locatio
                });
     };
 
-    
-
+    /*Map Markers*/
     $scope.getAllForMap = function(){
-        // user-created function for map-listings.client.view.html
-
           $scope.loading = true;
           $scope.listings = [];
-          // Get all the listings, then push it to the scope
+          // Get all listings, then push it to the scope
           Listings.getAll()
                 .then(function(response){
-                  $scope.loading = false; //remove loader
+                  $scope.loading = false;
                   response.data.forEach(function(listing){
                   if(listing.coordinates) {
                     $scope.listings.push(listing);
                 }
                 });
-
-
           }, function(error){
             $scope.loading = false;
             $scope.error = "Unable to retrieve listings!\n + error";
           });
         };
 
-        /* Bind the success message to the scope if it exists as part of the current state */
-        if($stateParams.successMessage) {
-          $scope.success = $stateParams.successMessage;
-
-        }
+    /* Bind the success message to the scope if it exists as part of the current state */
+      if($stateParams.successMessage) {
+        $scope.success = $stateParams.successMessage;
+      }
 
     /* Map properties */
     $scope.map = {
@@ -159,6 +140,5 @@ angular.module('listings').controller('ListingsController', ['$scope', '$locatio
       },
       zoom: 14
     };
-
   }
 ]);
